@@ -14,19 +14,23 @@ In Python 3, a standard string object will be returned. If you need bytes, use:
 >>> unidecode("Κνωσός").encode("ascii")
 b'Knosos'
 """
+import sys
+import pkgutil
 import warnings
-from sys import version_info
+
+
+pkgutil.extend_path(__path__, __name__)
 
 Cache = {}
 
-
 def _warn_if_not_unicode(string):
-    if version_info[0] < 3 and not isinstance(string, unicode):
-        warnings.warn(  "Argument %r is not an unicode object. "
-                        "Passing an encoded string will likely have "
-                        "unexpected results." % (type(string),),
-                        RuntimeWarning, 2)
-
+    if sys.version_info[0] < 3 and not isinstance(string, unicode):
+        warnings.warn(
+            "Argument %r is not an unicode object. "
+            "Passing an encoded string will likely have "
+            "unexpected results." % ( type(string), ),
+            RuntimeWarning, 2
+        )
 
 def unidecode_expect_ascii(string):
     """Transliterate an Unicode object into an ASCII string
@@ -42,14 +46,17 @@ def unidecode_expect_ascii(string):
     characters, but slightly slower than using unidecode directly if non-ASCII
     chars are present.
     """
-
     _warn_if_not_unicode(string)
+
     try:
         bytestring = string.encode('ASCII')
+
     except UnicodeEncodeError:
         return _unidecode(string)
-    if version_info[0] >= 3:
+
+    if sys.version_info[0] >= 3:
         return string
+
     else:
         return bytestring
 
@@ -59,11 +66,8 @@ def unidecode_expect_nonascii(string):
     >>> unidecode(u"\u5317\u4EB0")
     "Bei Jing "
     """
-
     _warn_if_not_unicode(string)
     return _unidecode(string)
-
-unidecode = unidecode_expect_ascii
 
 def _unidecode(string):
     retval = []
@@ -71,26 +75,32 @@ def _unidecode(string):
     for char in string:
         codepoint = ord(char)
 
-        if codepoint < 0x80: # Basic ASCII
+        if codepoint < 0x80:  # Basic ASCII
             retval.append(str(char))
             continue
-        
+
         if codepoint > 0xeffff:
-            continue # Characters in Private Use Area and above are ignored
+            continue  # Characters in Private Use Area and above are ignored
 
         if 0xd800 <= codepoint <= 0xdfff:
-            warnings.warn(  "Surrogate character %r will be ignored. "
-                            "You might be using a narrow Python build." % (char,),
-                            RuntimeWarning, 2)
+            warnings.warn(
+                "Surrogate character %r will be ignored. "
+                "You might be using a narrow Python build." % ( char, ),
+                RuntimeWarning, 2
+            )
 
-        section = codepoint >> 8   # Chop off the last two hex digits
-        position = codepoint % 256 # Last two hex digits
+        section = codepoint >> 8    # Chop off the last two hex digits
+        position = codepoint % 256  # Last two hex digits
 
         try:
             table = Cache[section]
+
         except KeyError:
             try:
-                mod = __import__('unidecode.x%03x'%(section), globals(), locals(), ['data'])
+                name = ".".join("%03x" % ( section, ))
+                mod_name = f"unidecode.chars.{name}"
+                mod = __import__(mod_name, globals(), locals(), [ "data" ])
+
             except ImportError:
                 Cache[section] = None
                 continue   # No match: ignore this character and carry on.
@@ -98,6 +108,8 @@ def _unidecode(string):
             Cache[section] = table = mod.data
 
         if table and len(table) > position:
-            retval.append( table[position] )
+            retval.append(table[position])
 
     return ''.join(retval)
+
+unidecode = unidecode_expect_ascii

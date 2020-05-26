@@ -2,7 +2,7 @@
 # vi:tabstop=4:expandtab:sw=4
 
 import os
-from setuptools import setup
+from setuptools import setup, find_namespace_packages
 
 
 def get_long_description():
@@ -18,7 +18,9 @@ setup(
     author='Tomaz Solc',
     author_email='tomaz.solc@tablix.org',
 
-    packages=['unidecode'],
+    packages=find_namespace_packages(include=[
+        "unidecode", "unidecode.*"
+    ]),
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
 
     test_suite='tests',
