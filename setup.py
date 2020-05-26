@@ -10,26 +10,28 @@ def get_long_description():
         return fp.read()
 
 setup(
-    name='Unidecode',
-    version='1.1.1',
-    description='ASCII transliterations of Unicode text',
-    license='GPL',
+    name="Unidecode",
+    version="1.1.1",
+    description="ASCII transliterations of Unicode text",
+    license="GPL",
     long_description=get_long_description(),
-    author='Tomaz Solc',
-    author_email='tomaz.solc@tablix.org',
+    author="Tomaz Solc",
+    author_email="tomaz.solc@tablix.org",
 
     packages=find_namespace_packages(include=[
         "unidecode", "unidecode.*"
     ]),
+
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
 
-    test_suite='tests',
+    test_suite="tests",
 
     entry_points={
-        'console_scripts': [
-            'unidecode = unidecode.util:main'
+        "console_scripts": [
+            "unidecode = unidecode.util:main"
         ]
     },
+
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Programming Language :: Python",
