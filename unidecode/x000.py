@@ -43,13 +43,13 @@ data = (
 '',    # 0x9e
 '',    # 0x9f
 ' ',    # 0xa0
-'!',    # 0xa1
+'i',    # 0xa1
 'C/',    # 0xa2
 
 # Not "GBP" - Pound Sign is used for more than just British Pounds.
-'PS',    # 0xa3
+'E',    # 0xa3
 
-'$?',    # 0xa4
+'*',    # 0xa4
 'Y=',    # 0xa5
 '|',    # 0xa6
 'SS',    # 0xa7
@@ -61,7 +61,7 @@ data = (
 '',    # 0xad
 '(r)',    # 0xae
 '-',    # 0xaf
-'deg',    # 0xb0
+'o',    # 0xb0
 '+-',    # 0xb1
 
 # These might be combined with other superscript digits (u+2070 - u+2079)
@@ -119,8 +119,8 @@ data = (
 'U',    # 0xdc
 
 'Y',    # 0xdd
-'Th',    # 0xde
-'ss',    # 0xdf
+'D',    # 0xde
+'B',    # 0xdf
 'a',    # 0xe0
 'a',    # 0xe1
 'a',    # 0xe2
@@ -160,6 +160,6 @@ data = (
 'u',    # 0xfc
 
 'y',    # 0xfd
-'th',    # 0xfe
+'b',    # 0xfe
 'y',    # 0xff
 )
